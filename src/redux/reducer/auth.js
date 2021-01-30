@@ -5,7 +5,7 @@ export const authReducer = (
   state = { email: "", password: "", user: null, isLoginFail: false },
   action
 ) => {
-    console.log(action);
+  console.log(action);
   switch (action.type) {
     case "@@INIT": {
       return initState(state);
@@ -24,6 +24,9 @@ export const authReducer = (
     }
     case actionTypes.LOGIN: {
       return handleLogin(state, action.payload);
+    }
+    case actionTypes.LOGOUT: {
+      return handleLogout();
     }
     default:
       return state;
@@ -68,4 +71,11 @@ const handleLogin = (currentState, payload) => {
       isLoginFail: true,
     };
   }
+};
+const handleLogout = (currentState) => {
+  localStorage.removeItem("authEmail");
+  return {
+    ...currentState,
+    user: null,
+  };
 };

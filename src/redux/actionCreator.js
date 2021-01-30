@@ -28,11 +28,18 @@ export const changePasswordInputValue = (newPassword) => {
 };
 
 export const login = () => ({
-    type: actionTypes.LOGIN,
-    payload: {}
+  type: actionTypes.LOGIN,
+  payload: {},
 });
 
 export const logout = () => ({
-    type: actionTypes.LOGIN,
-    payload: {}
+  type: actionTypes.LOGOUT,
+  payload: {},
+});
+
+export const updateTodoList = (newTodolist) => ({
+  type: actionTypes.UPDATE_TODO_LIST,
+  payload: {
+    newTodolist,
+  },
 });

@@ -6,14 +6,15 @@ import TaskList from "./TaskList";
 import { getTodo, markTaskComplete, markTaskFavorite } from "./TodoService";
 import { Redirect, useHistory } from "react-router-dom";
 import style from "./TodoList.module.css";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { logout, updateTodoList } from "../redux/actionCreator";
 export default function TodoList() {
-  const [taskList, setTaskList] = useState([]);
+  const taskList = useSelector((state) => state.todos.todoList);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [loadingCount, setCount] = useState(0);
   const convertDate = (time) => new Date(time).getTime();
+  const dispatch = useDispatch();
   const history = useHistory();
   const currentUser = useSelector((state) => state.auth.user);
 
@@ -21,16 +22,19 @@ export default function TodoList() {
     const asyncFunc = async () => {
       try {
         const response = await getTodo();
-        setTaskList(
-          response.data.data.map((task) => {
-            return {
-              ...task,
-              createdDate: convertDate(task.createdDate),
-              completedDate: convertDate(task.completedDate),
-              isFavorite: task.isFavorite ? 1 : 0,
-            };
-          })
+        dispatch(
+          updateTodoList(
+            response.data.data.map((task) => {
+              return {
+                ...task,
+                createdDate: convertDate(task.createdDate),
+                completedDate: convertDate(task.completedDate),
+                isFavorite: task.isFavorite ? 1 : 0,
+              };
+            })
+          )
         );
+
         setIsError(false);
         setIsLoading(false);
       } catch (err) {
@@ -40,7 +44,7 @@ export default function TodoList() {
     };
 
     asyncFunc();
-  }, [loadingCount]);
+  }, [loadingCount, dispatch]);
 
   const [completedList, incompletedList] = _.partition(
     taskList,
@@ -85,7 +89,7 @@ export default function TodoList() {
           onChangeCompleteStatus={handleChangeCompleteStatus}
           onChangeFavoriteStatus={handleChangeFavoriteStatus}
         />
-        <button onClick={() => history.push('/')}>Log out</button>
+        <button onClick={() => dispatch(logout())}>Log out</button>
       </div>
     );
   };
