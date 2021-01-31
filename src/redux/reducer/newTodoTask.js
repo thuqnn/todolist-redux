@@ -1,9 +1,12 @@
-
-export const newTodoTask = (state = '', action) => {
-    switch(action.type) {
-        case 'CHANGE_INPUT' : {
-            return action.payload;
-        }
-        default: return state;
+export const newTodoTask = (state = { inputValue: "" }, action) => {
+  switch (action.type) {
+    case "CHANGE_INPUT": {
+      return {
+        ...state,
+        inputValue: action.payload.newTask,
+      };
     }
-}
+    default:
+      return state;
+  }
+};

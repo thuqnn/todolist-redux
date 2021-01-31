@@ -1,21 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import _ from "lodash";
 import CompleteTask from "./CompleteTask";
 import Header from "./Header";
 import TaskList from "./TaskList";
 import { getTodo, markTaskComplete, markTaskFavorite } from "./TodoService";
-import { Redirect, useHistory } from "react-router-dom";
 import style from "./TodoList.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, updateTodoList } from "../redux/actionCreator";
+import {
+  logout,
+  updateTodoList,
+  updateLoadingTodo,
+  updateLoadingError,
+  updateLoadingCount,
+} from "../redux/actionCreator";
 export default function TodoList() {
+  //useSelector <=> mapstatetoprops khác nhau return ra kiểu dữ liệu (lấy dữ liệu state mới)
   const taskList = useSelector((state) => state.todos.todoList);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [loadingCount, setCount] = useState(0);
+  const isLoading = useSelector((state) => state.loadings.loading);
+  const isError = useSelector((state) => state.loadings.error);
+  const loadingCount = useSelector((state) => state.loadings.loadingCount);
   const convertDate = (time) => new Date(time).getTime();
-  const dispatch = useDispatch();
-  const history = useHistory();
+  const dispatch = useDispatch(); //dispatch change state
+
   const currentUser = useSelector((state) => state.auth.user);
 
   useEffect(() => {
@@ -35,11 +41,11 @@ export default function TodoList() {
           )
         );
 
-        setIsError(false);
-        setIsLoading(false);
+        dispatch(updateLoadingError(false));
+        dispatch(updateLoadingTodo(false));
       } catch (err) {
         console.log(err);
-        setIsError(true);
+        dispatch(updateLoadingError(true));
       }
     };
 
@@ -53,10 +59,10 @@ export default function TodoList() {
 
   const handleChangeCompleteStatus = async (taskId, newStatus) => {
     try {
-      setIsLoading(true);
-      setIsError(false);
+      dispatch(updateLoadingTodo(true));
+      dispatch(updateLoadingError(false));
       await markTaskComplete(taskId, newStatus);
-      setCount(loadingCount + 1);
+      dispatch(updateLoadingCount(loadingCount + 1));
     } catch (err) {
       console.log(err);
     }
@@ -64,10 +70,10 @@ export default function TodoList() {
 
   const handleChangeFavoriteStatus = async (taskId, newStatus) => {
     try {
-      setIsLoading(true);
-      setIsError(false);
+      dispatch(updateLoadingTodo(true));
+      dispatch(updateLoadingError(false));
       await markTaskFavorite(taskId, newStatus);
-      setCount(loadingCount + 1);
+      dispatch(updateLoadingCount(loadingCount + 1));
     } catch (err) {
       console.log(err);
     }
@@ -95,9 +101,9 @@ export default function TodoList() {
   };
 
   const setLoadingCount = () => {
-    setIsError(false);
-    setIsLoading(true);
-    setCount(loadingCount + 1);
+    dispatch(updateLoadingError(false));
+    dispatch(updateLoadingTodo(true));
+    dispatch(updateLoadingCount(loadingCount + 1));
   };
 
   const renderErrorContent = () => {

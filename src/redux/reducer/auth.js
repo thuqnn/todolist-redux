@@ -5,7 +5,6 @@ export const authReducer = (
   state = { email: "", password: "", user: null, isLoginFail: false },
   action
 ) => {
-  console.log(action);
   switch (action.type) {
     case "@@INIT": {
       return initState(state);
@@ -73,7 +72,7 @@ const handleLogin = (currentState, payload) => {
   }
 };
 const handleLogout = (currentState) => {
-  localStorage.removeItem("authEmail");
+  localStorage.removeItem("authUserEmail");
   return {
     ...currentState,
     user: null,

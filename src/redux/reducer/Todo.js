@@ -5,7 +5,7 @@ export const Todos = (state = { todoList: [] }, action) => {
     case actionTypes.UPDATE_TODO_LIST: {
       return {
         ...state,
-        todoList: action.payload.newTodolist,
+        todoList: action.payload.newTodoList,
       };
     }
     default:

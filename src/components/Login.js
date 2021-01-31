@@ -35,17 +35,17 @@ export default function Login() {
           <h1>Welcome TodoList</h1>
           <input
             type="text"
-            value={email}
+            value={email || ""}
             placeholder="Type your email..."
             onChange={(e) => handleChangeEmail(e.target.value)}
           />
           <input
             type="text"
-            value={password}
+            value={password || ""}
             placeholder="Type your password..."
             onChange={(e) => handleChangePassword(e.target.value)}
           />
-          <button onClick={handleLogin}>Login</button>
+          <button onClick={() => handleLogin()}>Login</button>
           <span>
             {isLoginFail
               ? "* Tài khoản hoặc mật khẩu không chính xac, vui lòng nhập lại"

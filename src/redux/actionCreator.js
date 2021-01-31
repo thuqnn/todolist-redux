@@ -37,9 +37,28 @@ export const logout = () => ({
   payload: {},
 });
 
-export const updateTodoList = (newTodolist) => ({
+export const updateTodoList = (newTodoList) => ({
   type: actionTypes.UPDATE_TODO_LIST,
   payload: {
-    newTodolist,
+    newTodoList,
+  },
+});
+
+export const updateLoadingTodo = (loading) => ({
+  type: actionTypes.LOADING_TODO,
+  payload: {
+    loading,
+  },
+});
+export const updateLoadingError = (error) => ({
+  type: actionTypes.LOADING_ERROR,
+  payload: {
+    error,
+  },
+});
+export const updateLoadingCount = (loadingCount) => ({
+  type: actionTypes.LOADING_COUNT,
+  payload: {
+    loadingCount: loadingCount + 1,
   },
 });
