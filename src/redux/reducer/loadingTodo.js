@@ -1,7 +1,5 @@
-export const loadingTodos = (
-  state = { loading: true, error: false, loadingCount: 0 },
-  action
-) => {
+const initialState = { loading: true, error: false, loadingCount: 0 };
+export const loadingTodos = (state = initialState, action) => {
   switch (action.type) {
     case "LOADING_TODO": {
       return {
